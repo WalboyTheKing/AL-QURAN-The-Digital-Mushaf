@@ -1,0 +1,263 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@font-face {
+  font-family: "UthmanicHafs";
+  src: url("https://quran.com/fonts/quran/hafs/uthmanic_hafs/UthmanicHafs1Ver18.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --mushaf-desk: #efe9dc;
+  --mushaf-desk-accent: #e4dccb;
+  --mushaf-paper: #fcf9f2;
+  --mushaf-paper-edge: #f1eadb;
+  --mushaf-audio-bg: #f6f1e6;
+  --mushaf-ink: #171412;
+  --mushaf-ink-muted: #5c5347;
+  --mushaf-gold: #9a7832;
+  --mushaf-gold-soft: rgba(154, 120, 50, 0.25);
+  --mushaf-emerald: #0f7652;
+  --mushaf-emerald-bg: rgba(15, 118, 82, 0.11);
+  --mushaf-word-bg: rgba(15, 118, 82, 0.22);
+  --mushaf-spine: rgba(42, 30, 14, 0.22);
+  --mushaf-border: rgba(120, 98, 60, 0.2);
+}
+
+html.theme-sepia {
+  --mushaf-desk: #e3d8c3;
+  --mushaf-desk-accent: #d5c7ad;
+  --mushaf-paper: #f3e8d0;
+  --mushaf-paper-edge: #e4d4b4;
+  --mushaf-audio-bg: #ece0c6;
+  --mushaf-ink: #2a2016;
+  --mushaf-ink-muted: #66523d;
+  --mushaf-gold: #866323;
+  --mushaf-gold-soft: rgba(134, 99, 35, 0.28);
+  --mushaf-emerald: #0e6b4a;
+  --mushaf-emerald-bg: rgba(14, 107, 74, 0.12);
+  --mushaf-word-bg: rgba(14, 107, 74, 0.24);
+  --mushaf-spine: rgba(48, 34, 16, 0.24);
+  --mushaf-border: rgba(114, 88, 48, 0.24);
+}
+
+html.theme-night {
+  --mushaf-desk: #0d1210;
+  --mushaf-desk-accent: #141c19;
+  --mushaf-paper: #161e1b;
+  --mushaf-paper-edge: #1e2925;
+  --mushaf-audio-bg: #121916;
+  --mushaf-ink: #eee9de;
+  --mushaf-ink-muted: #a6a295;
+  --mushaf-gold: #c9a55a;
+  --mushaf-gold-soft: rgba(201, 165, 90, 0.24);
+  --mushaf-emerald: #34d399;
+  --mushaf-emerald-bg: rgba(52, 211, 153, 0.12);
+  --mushaf-word-bg: rgba(52, 211, 153, 0.24);
+  --mushaf-spine: rgba(0, 0, 0, 0.6);
+  --mushaf-border: rgba(201, 165, 90, 0.18);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    background-color: var(--mushaf-desk);
+    color: var(--mushaf-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.font-display {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.font-quran {
+  font-family: "UthmanicHafs", "Amiri Quran", "Scheherazade New", serif;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+}
+
+/* ============================================================
+   4-Zone Application Layout Shell (Strict Non-Overlapping Grid)
+   ============================================================ */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--mushaf-desk);
+  color: var(--mushaf-ink);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app-header {
+  flex-shrink: 0;
+  z-index: 35;
+  border-bottom: 1px solid var(--mushaf-border);
+  background-color: var(--mushaf-paper);
+}
+
+.app-navigation {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 34;
+  border-bottom: 1px solid var(--mushaf-border);
+  background-color: var(--mushaf-audio-bg);
+}
+
+.mushaf-viewport {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0%;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  padding: 12px 16px;
+}
+
+@media (min-width: 1024px) {
+  .mushaf-viewport {
+    padding: 16px 28px;
+  }
+}
+
+.mushaf-book {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-shrink: 0;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.mushaf-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mushaf-spine {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  z-index: 25;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.08) 28%,
+    rgba(0, 0, 0, 0.24) 50%,
+    rgba(0, 0, 0, 0.08) 72%,
+    transparent 100%
+  );
+}
+
+.audio-player {
+  flex-shrink: 0;
+  z-index: 30;
+  width: 100%;
+  background-color: var(--mushaf-audio-bg);
+  border-top: 1px solid var(--mushaf-border);
+  box-shadow: 0 -6px 20px -10px rgba(15, 20, 16, 0.16);
+}
+
+.audio-player-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.audio-player-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Subtle paper grain & book page shading */
+.mushaf-paper-surface {
+  background-color: var(--mushaf-paper);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.16) 0%, transparent 65%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(140, 120, 85, 0.014) 0px,
+      rgba(140, 120, 85, 0.014) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
+
+html.theme-night .mushaf-paper-surface {
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.025) 0%, transparent 65%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
+
+/* 3D Page Flip Perspective & Realistic Paper Curvature */
+.book-stage {
+  perspective: 2600px;
+  perspective-origin: 50% 48%;
+  transform-style: preserve-3d;
+}
+
+.book-leaf {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.book-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.book-face-back {
+  transform: rotateY(180deg);
+}
+
+/* Custom thin scrollbars inside page & drawers */
+.mushaf-scroll::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.mushaf-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mushaf-scroll::-webkit-scrollbar-thumb {
+  background: var(--mushaf-gold-soft);
+  border-radius: 9999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-leaf {
+    transition-duration: 0.01ms !important;
+  }
+}
